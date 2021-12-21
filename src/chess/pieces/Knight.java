@@ -4,6 +4,7 @@ import boardgame.Board;
 import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
+import resourceBundle.pieces.Pieces;
 
 public class Knight extends ChessPiece {
 
@@ -13,7 +14,7 @@ public class Knight extends ChessPiece {
 
 	@Override
 	public String toString() {
-		return "N";
+		return Pieces.getString(Pieces.knight);
 	}
 
 	private boolean canMove(Position position) {

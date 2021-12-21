@@ -5,6 +5,7 @@ import boardgame.Position;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
+import resourceBundle.pieces.Pieces;
 
 public class Pawn extends ChessPiece {
 
@@ -14,7 +15,12 @@ public class Pawn extends ChessPiece {
 		super(board, color);
 		this.chessMatch = chessMatch;
 	}
-
+	
+	@Override
+	public String toString() {
+		return Pieces.getString(Pieces.pawn);
+	}
+	
 	@Override
 	public boolean[][] possibleMoves() {
 		boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getColumns()];
@@ -84,11 +90,6 @@ public class Pawn extends ChessPiece {
 			}			
 		}
 		return mat;
-	}
-	
-	@Override
-	public String toString() {
-		return "P";
 	}
 	
 }

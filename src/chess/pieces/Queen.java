@@ -4,6 +4,7 @@ import boardgame.Board;
 import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
+import resourceBundle.pieces.Pieces;
 
 public class Queen extends ChessPiece {
 
@@ -13,7 +14,7 @@ public class Queen extends ChessPiece {
 
 	@Override
 	public String toString() {
-		return "Q";
+		return Pieces.getString(Pieces.queen);
 	}
 	
 	@Override

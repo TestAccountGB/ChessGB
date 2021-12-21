@@ -4,6 +4,7 @@ import boardgame.Board;
 import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
+import resourceBundle.pieces.Pieces;
 
 public class Rook extends ChessPiece {
 
@@ -13,7 +14,7 @@ public class Rook extends ChessPiece {
 
 	@Override
 	public String toString() {
-		return "R";
+		return Pieces.getString(Pieces.rook);
 	}
 	
 	@Override
