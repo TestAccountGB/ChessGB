@@ -1,4 +1,4 @@
-package resourceBundle.exceptions;
+package resourceBundle;
 
 import java.util.ResourceBundle;
 

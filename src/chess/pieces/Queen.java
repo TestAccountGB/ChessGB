@@ -4,7 +4,7 @@ import boardgame.Board;
 import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
-import resourceBundle.pieces.Pieces;
+import resourceBundle.Pieces;
 
 public class Queen extends ChessPiece {
 

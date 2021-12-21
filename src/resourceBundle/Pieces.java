@@ -1,4 +1,4 @@
-package resourceBundle.pieces;
+package resourceBundle;
 
 import java.util.ResourceBundle;
 

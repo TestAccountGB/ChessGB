@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,9 @@ import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import chess.Color;
-import resourceBundle.exceptions.Exceptions;
-import resourceBundle.messages.Messages;
-import resourceBundle.pieces.Pieces;
+import resourceBundle.Exceptions;
+import resourceBundle.Messages;
+import resourceBundle.Pieces;
 
 public class UI {
 
@@ -50,13 +51,16 @@ public class UI {
 		System.out.flush();
 	}
 
-	public static ChessPosition readChessPosition(Scanner sc) {
+	public static ChessPosition readChessPosition(Scanner sc) throws IllegalArgumentException {
+		String string = null;
 		try {
-			String s = sc.nextLine();
-			char column = s.charAt(0);
-			int row = Integer.parseInt(s.substring(1));
+			 string = sc.nextLine();
+			char column = string.toLowerCase().charAt(0);
+			int row = Integer.parseInt(string.substring(1));
 			return new ChessPosition(column, row);
 		} catch (RuntimeException e) {
+			if(string.toUpperCase().equals("!SAIR"))
+				throw new IllegalArgumentException();
 			throw new InputMismatchException(Exceptions.getString(Exceptions.chessPositionError));
 		}
 	}
@@ -144,42 +148,63 @@ public class UI {
 					}
 				}
 			}
-
+			
+			Files.setAttribute(path, "dos:readonly", false);
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
-				System.out.println("Error reading previously chosen language. Setting the default language(en_Us)...");
+				System.out.println("Error reading previously chosen language. Setting the default language(en_US)...");
 				writer.write("Language=en_US");
+				Files.setAttribute(path, "dos:readonly", true);
 				return new Locale("en", "US");
 			}
 		}
 	}
 
 	private static Locale firstTime(Scanner scan, Path path) throws IOException {
-		System.out.println("Welcome :)");
-		System.out.println("First, Let's choose a language");
-		System.out.println("1- English");
-		System.out.println("2- Portugues");
-
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
-			writer.write("Language=");
-
-			while (true) {
-				String answer = scan.next().trim();
-				switch (answer) {
-				case "1":
-					writer.write("en_US");
-					writer.flush();
-					return new Locale("en", "US");
-				case "2":
-					writer.write("pt_BR");
-					writer.flush();
-					return new Locale("pt", "BR");
-				default:
-					System.out.println("Ivalid option. Try again");
-				}
+		System.out.println(UI.ANSI_WHITE + "Welcome :)");
+		System.out.println("First, Let's choose a language" + UI.ANSI_RESET);
+		
+		return changeLanguage(scan, path);
+	}
+	
+	private static Locale askLanguage(Scanner scan, BufferedWriter writer) throws IOException {
+		
+		while (true) {
+			String answer = scan.next().trim();
+			switch (answer) {
+			case "1":
+				writer.write("en_US");
+				writer.flush();
+				return new Locale("en", "US");
+			case "2":
+				writer.write("pt_BR");
+				writer.flush();
+				return new Locale("pt", "BR");
+			default:
+				System.out.println("Ivalid option. Try again");
 			}
 		}
 	}
-
+	
+	public static Locale changeLanguage(Scanner scan, Path path) throws IOException {
+		System.out.println(UI.ANSI_WHITE + "1- English");
+		System.out.println("2- Portugues" + UI.ANSI_RESET);
+		
+		Files.setAttribute(path, "dos:readonly", false);
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
+			writer.write("Language=");
+			
+			Locale locale = askLanguage(scan, writer);
+			
+			Files.setAttribute(path, "dos:readonly", true);
+			
+			Exceptions.bundle = ResourceBundle.getBundle("exceptionMessages", locale);
+			Messages.bundle = ResourceBundle.getBundle("messages", locale);
+			Pieces.bundle = ResourceBundle.getBundle("pieces", locale);
+			
+			return locale;
+		}
+	}
+	
 	private static void printCapturedPieces(List<ChessPiece> captured) {
 		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE)
 				.collect(Collectors.toList());
@@ -191,7 +216,7 @@ public class UI {
 		System.out.println(ANSI_RESET);
 		System.out.print(Messages.getString(Messages.black) + ": ");
 		System.out.print(ANSI_YELLOW + black);
-		System.out.print(ANSI_RESET);
+		System.out.println(ANSI_RESET);
 	}
 
 	public static String askPromotion(Scanner scan, ChessMatch match) {
@@ -207,4 +232,5 @@ public class UI {
 		}
 		throw new IllegalStateException(Exceptions.getString(Exceptions.typeError));
 	}
+	
 }

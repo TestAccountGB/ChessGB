@@ -15,9 +15,9 @@ import chess.pieces.Knight;
 import chess.pieces.Pawn;
 import chess.pieces.Queen;
 import chess.pieces.Rook;
-import resourceBundle.exceptions.Exceptions;
-import resourceBundle.messages.Messages;
-import resourceBundle.pieces.Pieces;
+import resourceBundle.Exceptions;
+import resourceBundle.Messages;
+import resourceBundle.Pieces;
 
 public class ChessMatch {
 
@@ -33,9 +33,13 @@ public class ChessMatch {
 	private List<Piece> capturedPieces = new ArrayList<>();
 
 	public ChessMatch() {
-		board = new Board(8, 8);
-		turn = 1;
-		currentPlayer = Color.WHITE;
+		this.board = new Board(8, 8);
+		this.turn = 1;
+		this.currentPlayer = Color.WHITE;
+//		this.check = false;
+//		this.checkMate = false;
+//		this.enPassantVulnerable = null;
+//		this.promoted = null;
 		initialSetup();
 	}
 

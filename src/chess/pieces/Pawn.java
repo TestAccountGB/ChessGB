@@ -5,7 +5,7 @@ import boardgame.Position;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
-import resourceBundle.pieces.Pieces;
+import resourceBundle.Pieces;
 
 public class Pawn extends ChessPiece {
 

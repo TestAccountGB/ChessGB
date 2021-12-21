@@ -1,7 +1,7 @@
 package chess;
 
 import boardgame.Position;
-import resourceBundle.exceptions.Exceptions;
+import resourceBundle.Exceptions;
 
 public class ChessPosition {
 	

@@ -1,8 +1,10 @@
 package application;
 
 import java.io.IOException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,43 +16,40 @@ import chess.ChessException;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
-import resourceBundle.exceptions.Exceptions;
-import resourceBundle.messages.Messages;
-import resourceBundle.pieces.Pieces;
+import resourceBundle.Exceptions;
+import resourceBundle.Messages;
+import resourceBundle.Pieces;
 
 public class Program {
 
 	public static void main(String[] args) throws IOException {
-		//I still have to organize everything, but the base is working
 		Scanner scan = new Scanner(System.in);
 
 		Path path = Paths.get(System.getProperty("user.home"), "Documents", "ChessGb", "ChessGbConfig.txt");
-
 		Locale locale = UI.userLanguage(scan, path);
 
 		Exceptions.bundle = ResourceBundle.getBundle("exceptionMessages", locale);
 		Messages.bundle = ResourceBundle.getBundle("messages", locale);
 		Pieces.bundle = ResourceBundle.getBundle("pieces", locale);
-
+		
 		while (true) {
-			System.out.println("1) Play");
-			System.out.println("2) Help (Not exists yet)");
-			System.out.println("3) Language (Not exists yet)");
-			System.out.println("4) Quit");
+			UI.clearScreen();
+			System.out.println("1) " + UI.ANSI_WHITE + Messages.getString(Messages.play));
+			System.out.println("2) " + Messages.getString(Messages.language));
+			System.out.println("3) " + Messages.getString(Messages.quit) + UI.ANSI_RESET);
 			String answer2 = scan.next().trim();
+			UI.clearScreen();
 
 			switch (answer2) {
 			case "1":
 				game();
 				break;
 			case "2":
-
+				UI.changeLanguage(scan, path);
 				break;
 			case "3":
-
-				break;
-			case "4":
 				System.exit(0);
+				break;
 			}
 		}
 
@@ -85,9 +84,12 @@ public class Program {
 			} catch (ChessException | InputMismatchException e) {
 				System.out.println(e.getMessage());
 				scan.nextLine();
+			} catch (IllegalArgumentException e) {
+				return;
 			}
 		}
 		UI.clearScreen();
 		UI.printMatch(chessMatch, captured);
+		scan.nextLine();
 	}
 }

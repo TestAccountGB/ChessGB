@@ -1,4 +1,4 @@
-package resourceBundle.messages;
+package resourceBundle;
 
 import java.util.ResourceBundle;
 
@@ -22,5 +22,8 @@ public class Messages {
 	public static String invalidValue = "invalidValue";
 	public static String source = "source";
 	public static String target = "target";
-
+	public static String play = "play";
+	public static String language = "language";
+	public static String quit = "quit";
+	
 }
